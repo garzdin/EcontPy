@@ -205,3 +205,9 @@ class Client(object):
 
             return self.request(REQUEST_REGISTRATION_REQUEST, data)
         return self.request(REQUEST_REGISTRATION_REQUEST)
+
+    def get_countries(self):
+        """
+        Get countries information
+        """
+        return self.request(REQUEST_COUNTRIES)
