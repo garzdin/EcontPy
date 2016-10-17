@@ -97,7 +97,7 @@ class Client(object):
     def get_request_type(self, type_id=None):
         return dict(REQUEST_TYPES)[type_id]
 
-    def get_shipments(self, shipments=[], full=False):
+    def get_shipments(self, shipments=None, detailed=False):
         """
         Get shipments with the supplied tracking id(s)
         # Parameters
@@ -107,13 +107,13 @@ class Client(object):
         if not shipments:
             raise Exception("Invalid shipment id(s)")
 
-        template = "<shipments full_tracking='{full}'>{data}</shipments>"
+        template = "<shipments full_tracking='{detailed}'>{data}</shipments>"
         numbers = []
 
         for shipment in shipments:
             numbers.append("<num>{number}</num>".format(number=shipment))
 
-        data = template.format(full="ON" if full else "", data="".join(numbers))
+        data = template.format(detailed="ON" if detailed else "", data="".join(numbers))
 
         return self.request(REQUEST_SHIPMENTS, data)
 
@@ -128,7 +128,7 @@ class Client(object):
             return self.request(REQUEST_CITIES_ZONES, None, updated_time)
         return self.request(REQUEST_CITIES_ZONES)
 
-    def get_cities(self, cities=[], zone_id="all", report_type="", updated_time=None):
+    def get_cities(self, cities=None, zone_id="all", report_type=None, updated_time=None):
         """
         Get cities (if at least one city is supplied it will do a search,
         otherwise it would return all cities)
@@ -195,7 +195,7 @@ class Client(object):
             return self.request(REQUEST_OFFICES, None, updated_time)
         return self.request(REQUEST_OFFICES)
 
-    def get_post_boxes(self, locations=[]):
+    def get_post_boxes(self, locations=None):
         """
         Get post boxes information
         # Parameters
@@ -231,7 +231,7 @@ class Client(object):
         """
         return self.request(REQUEST_PROFILE)
 
-    def get_registraion_request(self, email=""):
+    def get_registraion_request(self, email=None):
         """
         Get registration requests information
         """
@@ -249,12 +249,15 @@ class Client(object):
         """
         return self.request(REQUEST_COUNTRIES)
 
-    def cancel_shipments(self, shipments=[]):
+    def cancel_shipments(self, shipments=None):
         """
         Cancel shipments with the supplied ids
         # Parameters
             * shipments [array] - array of shipments ids
         """
+        if not shipments:
+            raise Exception("Invalid shipment id(s) supplied")
+
         template = "<cancel_shipments>{data}</cancel_shipments>"
         numbers = []
 
@@ -265,7 +268,7 @@ class Client(object):
 
         return self.request(REQUEST_CANCEL_SHIPMENTS, data)
 
-    def get_delivery_days(self, date=""):
+    def get_delivery_days(self, date=None):
         """
         Get available shipping days based on the current date
         """
@@ -281,7 +284,7 @@ class Client(object):
 
         return self.request(REQUEST_DELIVERY_DAYS, data)
 
-    def get_client_info(self, ein="", egn="", client_id=""):
+    def get_client_info(self, ein=None, egn=None, client_id=None):
         """
         Get information about a client
         # Parameters
@@ -304,7 +307,7 @@ class Client(object):
         """
         return self.request(REQUEST_ACCESS_CLIENTS)
 
-    def check_cd_agreement(self, client_name="", cd_agreement_id=""):
+    def check_cd_agreement(self, client_name=None, cd_agreement_id=None):
         """
         Verify the cash on delivery information
         # Parameters
@@ -320,13 +323,16 @@ class Client(object):
 
         return self.request(REQUEST_CHECK_CD_AGREEMENT, data)
 
-    def get_mediator_data(self, mediator_id="", from_date=""):
+    def get_mediator_data(self, mediator_id=None, from_date=None):
         """
         Get mediator information
         # Parameters
             * mediator_id [int/string] - The id of the mediator
             * from_date [string] (optional) - The date agains which to check
         """
+        if not mediator_id:
+            raise Exception("No mediator id supplied")
+            
         if from_date:
             if not match(DATE_FORMAT, from_date):
                 raise Exception("Invalid date supplied")
