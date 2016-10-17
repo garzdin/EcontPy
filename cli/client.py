@@ -270,3 +270,22 @@ class Client(object):
         Get information about the clients of the current user
         """
         return self.request(REQUEST_ACCESS_CLIENTS)
+
+    def get_mediator_data(self, mediator_id="", from_date=""):
+        """
+        Get mediator information
+        """
+        if from_date:
+            if not match(r"[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$", from_date):
+                raise exceptions.InvalidDate
+
+            template = "<mediator>{mediator}</mediator><from_date>{from_date}</from_date>"
+
+        template = "<mediator>{mediator}</mediator>"
+
+        if from_date:
+            data = template.format(mediator=mediator_id, from_date=from_date)
+
+        data = data = template.format(mediator=mediator_id)
+
+        return self.request(REQUEST_MEDIATOR_DATA, data)
