@@ -166,7 +166,19 @@ class Client(object):
 
         return self.request(REQUEST_CITIES)
 
-    #TODO: get_cities_regions
+    def get_cities_regions(self, updated_time=None):
+        """
+        Get region information within cities
+        # Parameters
+            * updated_time [string] (optional) - The date from which to display entries
+        """
+        if updated_time:
+            if not match(UPDATED_TIME_FORMAT, updated_time):
+                raise Exception("Invalid date supplied")
+
+            return self.request(REQUEST_CITIES_REGIONS, None, updated_time)
+
+        return self.request(REQUEST_CITIES_REGIONS)
 
     def get_cities_streets(self, updated_time=None):
         """
