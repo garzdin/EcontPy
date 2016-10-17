@@ -288,7 +288,7 @@ class Client(object):
         Get mediator information
         # Parameters
             * mediator_id [int/string] - The id of the mediator
-            * from_date [string] (оptional) -  The date against to cross check
+            * from_date [string] (оptional) - The date against to cross check
         """
         if from_date:
             if not match(r"[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$", from_date):
