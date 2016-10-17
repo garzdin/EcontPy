@@ -1,5 +1,4 @@
 import http
-import exceptions
 from re import match
 
 ECONT_DEMO_URL = "http://demo.econt.com/e-econt/xml_parcel_import.php"
@@ -80,7 +79,7 @@ class Client(object):
                 client_software="EcontPy"):
 
         if not any(request_type in type_row for type_row in REQUEST_TYPES):
-            raise exceptions.InvalidRequestType
+            raise Exception("Invalid request type")
 
         constructed_data = TEMPLATE.format(
             username=self.username,
@@ -105,7 +104,7 @@ class Client(object):
             * full [bool] - whether to display information about the movement of the package
         """
         if not shipments:
-            raise exceptions.InvalidShipments
+            raise Exception("Invalid shipment ids")
 
         template = "<shipments full_tracking='{full}'>{data}</shipments>"
         numbers = ""
@@ -237,10 +236,10 @@ class Client(object):
         Get available shipping days based on the current date
         """
         if not date:
-            raise exceptions.InvalidDate
+            raise Exception("Invalid date supplied")
 
         if not match(r"[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$", date):
-            raise exceptions.InvalidDate
+            raise Exception("Invalid date supplied")
 
         template = "<delivery_days>{data}</delivery_days>"
 
@@ -257,7 +256,7 @@ class Client(object):
             * id [int/string] - The ID of the client
         """
         if not ein or not egn or not client_id:
-            raise exceptions.InvalidClientInformation
+            raise Exception("Invalid client information")
 
         template = "<ein>{ein}</ein><egn>{egn}</egn><id>{id}</id>"
 
@@ -276,7 +275,7 @@ class Client(object):
         Verify the cash on delivery information
         """
         if not client_name or not cd_agreement_id:
-            raise exceptions.InvalidCDInformation
+            raise Exception("Invalid Cash on Delivery information")
 
         template = "<client_name>{client_name}</client_name><cd_agreement>{cd_agreement_id}</cd_agreement>"
 
@@ -290,7 +289,7 @@ class Client(object):
         """
         if from_date:
             if not match(r"[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$", from_date):
-                raise exceptions.InvalidDate
+                raise Exception("Invalid date supplied")
 
             template = "<mediator>{mediator}</mediator><from_date>{from_date}</from_date>"
 
