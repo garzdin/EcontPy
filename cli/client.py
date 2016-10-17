@@ -106,3 +106,6 @@ class Client(object):
         data = template.format(full="ON" if full else "", data=numbers)
 
         return self.request(REQUEST_SHIPMENTS, data)
+
+    def get_cities_zones(self):
+        return self.request(REQUEST_CITIES_ZONES)
