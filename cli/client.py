@@ -114,15 +114,18 @@ class Client(object):
         return self.request(REQUEST_SHIPMENTS, data)
 
     def get_cities_zones(self):
+        """
+        Get zone information within cities
+        """
         return self.request(REQUEST_CITIES_ZONES)
 
-    def get_cities(self, cities=[], zone_id="all", report_type=None):
+    def get_cities(self, cities=[], zone_id="all", report_type=""):
         """
         Get cities (if at least one city is supplied it will do a search,
         otherwise it would return all cities)
         # Parameters
             * cities [array] - array of city names in cyrillic
-            * zone_id [int/string] - a zone to constrain the search : See get_cities_zones()
+            * zone_id [int/string] - a zone to constrain the search (See get_cities_zones())
             * report_type [string] - whether to display full information for a city or pass in 'short' for a shorter version
         """
         if cities:
