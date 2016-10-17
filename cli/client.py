@@ -211,3 +211,19 @@ class Client(object):
         Get countries information
         """
         return self.request(REQUEST_COUNTRIES)
+
+    def cancel_shipments(self, shipments=[]):
+        """
+        Cancel shipments with the supplied ids
+        # Parameters
+            * shipments [array] - array of shipments ids
+        """
+        template = "<cancel_shipments>{data}</cancel_shipments>"
+        numbers = ""
+
+        for shipment in shipments:
+            numbers += "<num>{number}</num>".format(number=shipment)
+
+        data = template.format(data=numbers)
+
+        return self.request(REQUEST_CANCEL_SHIPMENTS, data)
