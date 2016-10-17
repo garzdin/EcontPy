@@ -99,21 +99,21 @@ class Client(object):
 
     def get_shipments(self, shipments=[], full=False):
         """
-        Get shipments with the supplied tracking ids
+        Get shipments with the supplied tracking id(s)
         # Parameters
-            * shipments [array] - array of shipments ids
+            * shipments [array] - array of shipments id(s)
             * full [bool] - whether to display information about the movement of the package
         """
         if not shipments:
-            raise Exception("Invalid shipment ids")
+            raise Exception("Invalid shipment id(s)")
 
         template = "<shipments full_tracking='{full}'>{data}</shipments>"
-        numbers = ""
+        numbers = []
 
         for shipment in shipments:
-            numbers += "<num>{number}</num>".format(number=shipment)
+            numbers.append("<num>{number}</num>".format(number=shipment))
 
-        data = template.format(full="ON" if full else "", data=numbers)
+        data = template.format(full="ON" if full else "", data="".join(numbers))
 
         return self.request(REQUEST_SHIPMENTS, data)
 
@@ -139,12 +139,12 @@ class Client(object):
         """
         if cities:
             template = "<cities><report_type>{report_type}</report_type><id_zone>{zone_id}</id_zone>{data}</cities>"
-            city_names = ""
+            city_names = []
 
             for city in cities:
-                city_names += "<city_name>{name}</city_name>".format(name=city)
+                city_names.append("<city_name>{name}</city_name>".format(name=city))
 
-            data = template.format(report_type=report_type, zone_id=zone_id, data=city_names)
+            data = template.format(report_type=report_type, zone_id=zone_id, data="".join(city_names))
 
             if updated_time:
                 if not match(UPDATED_TIME_FORMAT, updated_time):
@@ -203,12 +203,12 @@ class Client(object):
         """
         if locations:
             template = "<post_boxes>{data}</post_boxes>"
-            locations_data = ""
+            locations_data = []
 
             for location in location:
-                locations_data += "<e><city_name>{city_name}</city_name><quarter_name>{quarter_name}</quarter_name></e>".format(city_name=location[0], quarter_name=location[1])
+                locations_data.append("<e><city_name>{city_name}</city_name><quarter_name>{quarter_name}</quarter_name></e>".format(city_name=location[0], quarter_name=location[1]))
 
-            data = template.format(data=locations_data)
+            data = template.format(data="".join(locations_data))
 
             return self.request(REQUEST_POST_BOXES, data)
         return self.request(REQUEST_POST_BOXES)
@@ -256,12 +256,12 @@ class Client(object):
             * shipments [array] - array of shipments ids
         """
         template = "<cancel_shipments>{data}</cancel_shipments>"
-        numbers = ""
+        numbers = []
 
         for shipment in shipments:
-            numbers += "<num>{number}</num>".format(number=shipment)
+            numbers.append("<num>{number}</num>".format(number=shipment))
 
-        data = template.format(data=numbers)
+        data = template.format(data="".join(numbers))
 
         return self.request(REQUEST_CANCEL_SHIPMENTS, data)
 
