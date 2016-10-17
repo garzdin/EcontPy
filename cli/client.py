@@ -101,7 +101,7 @@ class Client(object):
         """
         Get shipments with the supplied tracking id(s)
         # Parameters
-            * shipments [array] - array of shipments id(s)
+            * shipments [int/string/array] - array of shipments id(s)
             * full [bool] - whether to display information about the movement of the package
         """
         if not shipments:
@@ -109,8 +109,11 @@ class Client(object):
 
         numbers = []
 
-        for shipment in shipments:
-            numbers.append("<num>{number}</num>".format(number=shipment))
+        if isinstance(shipments, int) or isinstance(shipments, str):
+            numbers = [str(shipments)]
+        else:
+            for shipment in shipments:
+                numbers.append("<num>{number}</num>".format(number=shipment))
 
         template = "<shipments full_tracking='{detailed}'>{data}</shipments>"
         data = template.format(detailed="ON" if detailed else "", data="".join(numbers))
