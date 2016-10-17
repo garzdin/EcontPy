@@ -264,3 +264,9 @@ class Client(object):
         data = template.format(ein=ein, egn=egn, id=client_id)
 
         return self.request(REQUEST_CLIENT_INFO, data)
+
+    def get_clients(self):
+        """
+        Get information about the clients of the current user
+        """
+        return self.request(REQUEST_ACCESS_CLIENTS)
