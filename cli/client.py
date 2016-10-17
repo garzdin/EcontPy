@@ -139,3 +139,21 @@ class Client(object):
 
             return self.request(REQUEST_CITIES, data)
         return self.request(REQUEST_CITIES)
+    def get_cities_streets(self):
+        """
+        Get street information within cities
+        """
+        return self.request(REQUEST_CITIES_STREETS)
+
+    def get_cities_quarters(self):
+        """
+        Get quarter information within cities
+        """
+        return self.request(REQUEST_CITIES_QUARTERS)
+
+    def get_offices(self):
+        """
+        Get offices information
+        """
+        return self.request(REQUEST_OFFICES)
+
