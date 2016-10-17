@@ -106,7 +106,7 @@ class Client(object):
         """
         if not shipments:
             raise exceptions.InvalidShipments
-        
+
         template = "<shipments full_tracking='{full}'>{data}</shipments>"
         numbers = ""
 
@@ -247,3 +247,20 @@ class Client(object):
         data = template.format(data=date)
 
         return self.request(REQUEST_DELIVERY_DAYS, data)
+
+    def get_client_info(self, ein="", egn="", client_id=""):
+        """
+        Get information about a client
+        # Parameters
+            * ein [int/string] - the EIN of the client
+            * egn [int/string] - The EGN of the client
+            * id [int/string] - The ID of the client
+        """
+        if not ein or not egn or not client_id:
+            raise exceptions.InvalidClientInformation
+
+        template = "<ein>{ein}</ein><egn>{egn}</egn><id>{id}</id>"
+
+        data = template.format(ein=ein, egn=egn, id=client_id)
+
+        return self.request(REQUEST_CLIENT_INFO, data)

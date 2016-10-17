@@ -9,3 +9,6 @@ class InvalidShipments(Error):
 
 class InvalidDate(Error):
     pass
+
+class InvalidClientInformation(Error):
+    pass
