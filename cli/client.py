@@ -86,7 +86,7 @@ class Client(object):
             password=self.password,
             request_type=self.get_request_type(request_type),
             updated_time="2012-04-22 18:30:00",
-            data=data,
+            data=data if data else "",
             mediator=mediator,
             client_software=client_software)
 
