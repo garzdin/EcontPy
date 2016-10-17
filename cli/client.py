@@ -1,5 +1,6 @@
-import http
 from re import match
+from requests import post
+from xmltodict import parse
 
 ECONT_DEMO_URL = "http://demo.econt.com/e-econt/xml_parcel_import.php"
 ECONT_DEMO_SERVICE_URL = "http://demo.econt.com/e-econt/xml_service_tool.php"
@@ -86,8 +87,12 @@ class Client(object):
             data=data if data else "",
             client_software=client_software)
 
-        return http.Request(ECONT_DEMO_SERVICE_URL
-                                if self.demo else ECONT_SERVICE_URL).send(constructed_data)
+        response = post(
+            ECONT_DEMO_SERVICE_URL if self.demo else ECONT_SERVICE_URL,
+            files={'file': constructed_data}
+        )
+
+        return parse(response.text.encode('utf-8'))
 
     def get_request_type(self, type_id=None):
         return dict(REQUEST_TYPES)[type_id]
