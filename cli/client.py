@@ -97,6 +97,12 @@ class Client(object):
         return dict(REQUEST_TYPES)[type_id]
 
     def get_shipments(self, shipments=[], full=False):
+        """
+        Get shipments with the supplied tracking ids
+        # Parameters
+            * shipments [array] - of shipments ids
+            * full [bool] - whether to display information about the movement of the package
+        """
         template = "<shipments full_tracking='{full}'>{data}</shipments>"
         numbers = ""
 
@@ -109,3 +115,24 @@ class Client(object):
 
     def get_cities_zones(self):
         return self.request(REQUEST_CITIES_ZONES)
+
+    def get_cities(self, cities=[], zone_id="all", report_type=None):
+        """
+        Get cities (if at least one city is supplied it will do a search,
+        otherwise it would return all cities)
+        # Parameters
+            * cities [array] - array of city names in cyrillic
+            * zone_id [int/string] - a zone to constrain the search : See get_cities_zones()
+            * report_type [string] - whether to display full information for a city or pass in 'short' for a shorter version
+        """
+        if cities:
+            template = "<cities><report_type>{report_type}</report_type><id_zone>{zone_id}</id_zone>{data}</cities>"
+            city_names = ""
+
+            for city in cities:
+                city_names += "<city_name>{name}</city_name>".format(name=city)
+
+            data = template.format(report_type=report_type if report_type else "", zone_id=zone_id, data=city_names)
+
+            return self.request(REQUEST_CITIES, data)
+        return self.request(REQUEST_CITIES)
