@@ -175,3 +175,22 @@ class Client(object):
 
             return self.request(REQUEST_POST_BOXES, data)
         return self.request(REQUEST_POST_BOXES)
+
+    def get_tariff_courier(self):
+        """
+        Get courier tariff information
+        """
+        return self.request(REQUEST_TARIFF_COURIER)
+
+    def get_tariff_post(self):
+        """
+        Get post tariff information
+        """
+        return self.request(REQUEST_TARIFF_POST)
+
+    def get_profile(self):
+        """
+        Get profile information
+        """
+        return self.request(REQUEST_PROFILE)
+
