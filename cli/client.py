@@ -139,6 +139,7 @@ class Client(object):
 
             return self.request(REQUEST_CITIES, data)
         return self.request(REQUEST_CITIES)
+
     def get_cities_streets(self):
         """
         Get street information within cities
@@ -157,3 +158,20 @@ class Client(object):
         """
         return self.request(REQUEST_OFFICES)
 
+    def get_post_boxes(self, locations=[]):
+        """
+        Get post boxes information
+        # Parameters
+            * locations [array] - array of tuples in the form of (city_name, quarter_name)
+        """
+        if locations:
+            template = "<post_boxes>{data}</post_boxes>"
+            locations_data = ""
+
+            for location in location:
+                locations_data += "<e><city_name>{city_name}</city_name><quarter_name>{quarter_name}</quarter_name></e>".format(city_name=location[0], quarter_name=location[1])
+
+            data = template.format(data=locations_data)
+
+            return self.request(REQUEST_POST_BOXES, data)
+        return self.request(REQUEST_POST_BOXES)
