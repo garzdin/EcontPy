@@ -194,3 +194,14 @@ class Client(object):
         """
         return self.request(REQUEST_PROFILE)
 
+    def get_registraion_request(self, email=""):
+        """
+        Get registration requests information
+        """
+        if email:
+            template = "<registration_request_mail>{data}</registration_request_mail>"
+
+            data = template.format(data=email)
+
+            return self.request(REQUEST_REGISTRATION_REQUEST, data)
+        return self.request(REQUEST_REGISTRATION_REQUEST)
