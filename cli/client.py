@@ -109,7 +109,7 @@ class Client(object):
 
         numbers = []
 
-        if isinstance(shipments, int) or isinstance(shipments, str):
+        if isinstance(shipments, (int, str)):
             numbers = [str(shipments)]
         else:
             for shipment in shipments:
