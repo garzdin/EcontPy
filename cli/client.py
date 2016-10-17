@@ -120,6 +120,8 @@ class Client(object):
     def get_cities_zones(self, updated_time=None):
         """
         Get zone information within cities
+        # Parameters
+            * updated_time [string] (optional) - The date from which to display entries
         """
         if updated_time:
             if not match(UPDATED_TIME_FORMAT, updated_time):
@@ -136,6 +138,7 @@ class Client(object):
             * cities [array] - array of city names in cyrillic
             * zone_id [int/string] - a zone to constrain the search (See get_cities_zones())
             * report_type [string] - whether to display full information for a city or pass in 'short' for a shorter version
+            * updated_time [string] (optional) - The date from which to display entries
         """
         if cities:
             template = "<cities><report_type>{report_type}</report_type><id_zone>{zone_id}</id_zone>{data}</cities>"
@@ -165,6 +168,8 @@ class Client(object):
     def get_cities_streets(self, updated_time=None):
         """
         Get street information within cities
+        # Parameters
+            * updated_time [string] (optional) - The date from which to display entries
         """
         if updated_time:
             if not match(UPDATED_TIME_FORMAT, updated_time):
@@ -176,6 +181,8 @@ class Client(object):
     def get_cities_quarters(self, updated_time=None):
         """
         Get quarter information within cities
+        # Parameters
+            * updated_time [string] (optional) - The date from which to display entries
         """
         if updated_time:
             if not match(UPDATED_TIME_FORMAT, updated_time):
@@ -187,6 +194,8 @@ class Client(object):
     def get_offices(self, updated_time=None):
         """
         Get offices information
+        # Parameters
+            * updated_time [string] (optional) - The date from which to display entries
         """
         if updated_time:
             if not match(UPDATED_TIME_FORMAT, updated_time):
@@ -342,7 +351,7 @@ class Client(object):
                 raise Exception("Invalid date supplied")
 
             template = "<mediator>{mediator}</mediator><from_date>{from_date}</from_date>"
-            
+
             data = template.format(mediator=mediator_id, from_date=from_date)
 
         return self.request(REQUEST_MEDIATOR_DATA, data)
