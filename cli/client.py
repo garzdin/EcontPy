@@ -135,7 +135,7 @@ class Client(object):
             for city in cities:
                 city_names += "<city_name>{name}</city_name>".format(name=city)
 
-            data = template.format(report_type=report_type if report_type else "", zone_id=zone_id, data=city_names)
+            data = template.format(report_type=report_type, zone_id=zone_id, data=city_names)
 
             return self.request(REQUEST_CITIES, data)
         return self.request(REQUEST_CITIES)
