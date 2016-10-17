@@ -270,6 +270,9 @@ class Client(object):
     def check_cd_agreement(self, client_name="", cd_agreement_id=""):
         """
         Verify the cash on delivery information
+        # Parameters
+            * client_name [string] - The name of the client
+            * cd_agreement_id [int/string] - The id of the cash delivery agreement
         """
         if not client_name or not cd_agreement_id:
             raise Exception("Invalid Cash on Delivery information")
@@ -283,6 +286,9 @@ class Client(object):
     def get_mediator_data(self, mediator_id="", from_date=""):
         """
         Get mediator information
+        # Parameters
+            * mediator_id [int/string] - The id of the mediator
+            * from_date [string] (оptional) -  The date against to cross check
         """
         if from_date:
             if not match(r"[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$", from_date):
