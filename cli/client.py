@@ -104,6 +104,9 @@ class Client(object):
             * shipments [array] - array of shipments ids
             * full [bool] - whether to display information about the movement of the package
         """
+        if not shipments:
+            raise exceptions.InvalidShipments
+        
         template = "<shipments full_tracking='{full}'>{data}</shipments>"
         numbers = ""
 
