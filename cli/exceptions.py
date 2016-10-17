@@ -12,3 +12,6 @@ class InvalidDate(Error):
 
 class InvalidClientInformation(Error):
     pass
+
+class InvalidCDInformation(Error):
+    pass

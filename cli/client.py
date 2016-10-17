@@ -271,6 +271,19 @@ class Client(object):
         """
         return self.request(REQUEST_ACCESS_CLIENTS)
 
+    def check_cd_agreement(self, client_name="", cd_agreement_id=""):
+        """
+        Verify the cash on delivery information
+        """
+        if not client_name or not cd_agreement_id:
+            raise exceptions.InvalidCDInformation
+
+        template = "<client_name>{client_name}</client_name><cd_agreement>{cd_agreement_id}</cd_agreement>"
+
+        data = template.format(client_name=client_name, cd_agreement_id=cd_agreement_id)
+
+        return self.request(REQUEST_CHECK_CD_AGREEMENT, data)
+
     def get_mediator_data(self, mediator_id="", from_date=""):
         """
         Get mediator information
