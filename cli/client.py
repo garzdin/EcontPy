@@ -100,7 +100,7 @@ class Client(object):
         """
         Get shipments with the supplied tracking ids
         # Parameters
-            * shipments [array] - of shipments ids
+            * shipments [array] - array of shipments ids
             * full [bool] - whether to display information about the movement of the package
         """
         template = "<shipments full_tracking='{full}'>{data}</shipments>"
