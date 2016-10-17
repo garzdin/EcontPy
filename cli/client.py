@@ -107,12 +107,12 @@ class Client(object):
         if not shipments:
             raise Exception("Invalid shipment id(s)")
 
-        template = "<shipments full_tracking='{detailed}'>{data}</shipments>"
         numbers = []
 
         for shipment in shipments:
             numbers.append("<num>{number}</num>".format(number=shipment))
 
+        template = "<shipments full_tracking='{detailed}'>{data}</shipments>"
         data = template.format(detailed="ON" if detailed else "", data="".join(numbers))
 
         return self.request(REQUEST_SHIPMENTS, data)
@@ -128,6 +128,7 @@ class Client(object):
                 raise Exception("Invalid date supplied")
 
             return self.request(REQUEST_CITIES_ZONES, None, updated_time)
+
         return self.request(REQUEST_CITIES_ZONES)
 
     def get_cities(self, cities=None, zone_id="all", report_type=None, updated_time=None):
@@ -141,12 +142,12 @@ class Client(object):
             * updated_time [string] (optional) - The date from which to display entries
         """
         if cities:
-            template = "<cities><report_type>{report_type}</report_type><id_zone>{zone_id}</id_zone>{data}</cities>"
             city_names = []
 
             for city in cities:
                 city_names.append("<city_name>{name}</city_name>".format(name=city))
 
+            template = "<cities><report_type>{report_type}</report_type><id_zone>{zone_id}</id_zone>{data}</cities>"
             data = template.format(report_type=report_type, zone_id=zone_id, data="".join(city_names))
 
             if updated_time:
@@ -154,6 +155,7 @@ class Client(object):
                     raise Exception("Invalid date supplied")
 
                 return self.request(REQUEST_CITIES, data, updated_time)
+
             return self.request(REQUEST_CITIES, data)
 
         if updated_time:
@@ -161,6 +163,7 @@ class Client(object):
                 raise Exception("Invalid date supplied")
 
             return self.request(REQUEST_CITIES, None, updated_time)
+
         return self.request(REQUEST_CITIES)
 
     #TODO: get_cities_regions
@@ -176,6 +179,7 @@ class Client(object):
                 raise Exception("Invalid date supplied")
 
             return self.request(REQUEST_CITIES_STREETS, None, updated_time)
+
         return self.request(REQUEST_CITIES_STREETS)
 
     def get_cities_quarters(self, updated_time=None):
@@ -189,6 +193,7 @@ class Client(object):
                 raise Exception("Invalid date supplied")
 
             return self.request(REQUEST_CITIES_QUARTERS, None, updated_time)
+
         return self.request(REQUEST_CITIES_QUARTERS)
 
     def get_offices(self, updated_time=None):
@@ -202,6 +207,7 @@ class Client(object):
                 raise Exception("Invalid date supplied")
 
             return self.request(REQUEST_OFFICES, None, updated_time)
+
         return self.request(REQUEST_OFFICES)
 
     def get_post_boxes(self, locations=None):
@@ -211,15 +217,16 @@ class Client(object):
             * locations [array] - array of tuples in the form of (city_name, quarter_name)
         """
         if locations:
-            template = "<post_boxes>{data}</post_boxes>"
             locations_data = []
 
             for location in location:
                 locations_data.append("<e><city_name>{city_name}</city_name><quarter_name>{quarter_name}</quarter_name></e>".format(city_name=location[0], quarter_name=location[1]))
 
+            template = "<post_boxes>{data}</post_boxes>"
             data = template.format(data="".join(locations_data))
 
             return self.request(REQUEST_POST_BOXES, data)
+
         return self.request(REQUEST_POST_BOXES)
 
     def get_tariff_courier(self):
@@ -246,10 +253,10 @@ class Client(object):
         """
         if email:
             template = "<registration_request_mail>{data}</registration_request_mail>"
-
             data = template.format(data=email)
 
             return self.request(REQUEST_REGISTRATION_REQUEST, data)
+
         return self.request(REQUEST_REGISTRATION_REQUEST)
 
     def get_countries(self):
@@ -267,12 +274,12 @@ class Client(object):
         if not shipments:
             raise Exception("Invalid shipment id(s) supplied")
 
-        template = "<cancel_shipments>{data}</cancel_shipments>"
         numbers = []
 
         for shipment in shipments:
             numbers.append("<num>{number}</num>".format(number=shipment))
 
+        template = "<cancel_shipments>{data}</cancel_shipments>"
         data = template.format(data="".join(numbers))
 
         return self.request(REQUEST_CANCEL_SHIPMENTS, data)
@@ -288,7 +295,6 @@ class Client(object):
             raise Exception("Invalid date supplied")
 
         template = "<delivery_days>{data}</delivery_days>"
-
         data = template.format(data=date)
 
         return self.request(REQUEST_DELIVERY_DAYS, data)
@@ -305,7 +311,6 @@ class Client(object):
             raise Exception("Invalid client information")
 
         template = "<ein>{ein}</ein><egn>{egn}</egn><id>{id}</id>"
-
         data = template.format(ein=ein, egn=egn, id=client_id)
 
         return self.request(REQUEST_CLIENT_INFO, data)
@@ -327,7 +332,6 @@ class Client(object):
             raise Exception("Invalid Cash on Delivery information")
 
         template = "<client_name>{client_name}</client_name><cd_agreement>{cd_agreement_id}</cd_agreement>"
-
         data = template.format(client_name=client_name, cd_agreement_id=cd_agreement_id)
 
         return self.request(REQUEST_CHECK_CD_AGREEMENT, data)
@@ -343,7 +347,6 @@ class Client(object):
             raise Exception("No mediator id supplied")
 
         template = "<mediator>{mediator}</mediator>"
-
         data = data = template.format(mediator=mediator_id)
 
         if from_date:
@@ -351,7 +354,6 @@ class Client(object):
                 raise Exception("Invalid date supplied")
 
             template = "<mediator>{mediator}</mediator><from_date>{from_date}</from_date>"
-
             data = template.format(mediator=mediator_id, from_date=from_date)
 
         return self.request(REQUEST_MEDIATOR_DATA, data)
