@@ -56,7 +56,6 @@ TEMPLATE = "\
     <request_type>{request_type}</request_type> \
     <updated_time>{updated_time}</updated_time> \
     {data} \
-    <mediator>{mediator}</mediator> \
     <client_software>{client_software}</client_software> \
 </request>"
 
@@ -75,7 +74,6 @@ class Client(object):
     def request(self,
                 request_type=None,
                 data=None,
-                mediator=None,
                 client_software="EcontPy"):
 
         if not any(request_type in type_row for type_row in REQUEST_TYPES):
@@ -87,7 +85,6 @@ class Client(object):
             request_type=self.get_request_type(request_type),
             updated_time="2012-04-22 18:30:00",
             data=data if data else "",
-            mediator=mediator,
             client_software=client_software)
 
         return http.Request(ECONT_DEMO_SERVICE_URL
