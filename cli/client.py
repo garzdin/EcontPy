@@ -1,5 +1,6 @@
 import http
 import exceptions
+from re import match
 
 ECONT_DEMO_URL = "http://demo.econt.com/e-econt/xml_parcel_import.php"
 ECONT_DEMO_SERVICE_URL = "http://demo.econt.com/e-econt/xml_service_tool.php"
@@ -227,3 +228,19 @@ class Client(object):
         data = template.format(data=numbers)
 
         return self.request(REQUEST_CANCEL_SHIPMENTS, data)
+
+    def get_delivery_days(self, date=""):
+        """
+        Get available shipping days based on the current date
+        """
+        if not date:
+            raise exceptions.InvalidDate
+
+        if not match(r"[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$", date):
+            raise exceptions.InvalidDate
+
+        template = "<delivery_days>{data}</delivery_days>"
+
+        data = template.format(data=date)
+
+        return self.request(REQUEST_DELIVERY_DAYS, data)

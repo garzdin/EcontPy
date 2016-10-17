@@ -3,3 +3,6 @@ class Error(Exception):
 
 class InvalidRequestType(Error):
     pass
+
+class InvalidDate(Error):
+    pass
