@@ -332,18 +332,17 @@ class Client(object):
         """
         if not mediator_id:
             raise Exception("No mediator id supplied")
-            
+
+        template = "<mediator>{mediator}</mediator>"
+
+        data = data = template.format(mediator=mediator_id)
+
         if from_date:
             if not match(DATE_FORMAT, from_date):
                 raise Exception("Invalid date supplied")
 
             template = "<mediator>{mediator}</mediator><from_date>{from_date}</from_date>"
-
-        template = "<mediator>{mediator}</mediator>"
-
-        if from_date:
+            
             data = template.format(mediator=mediator_id, from_date=from_date)
-
-        data = data = template.format(mediator=mediator_id)
 
         return self.request(REQUEST_MEDIATOR_DATA, data)
