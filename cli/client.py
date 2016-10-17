@@ -59,6 +59,9 @@ TEMPLATE = "\
     <client_software>{client_software}</client_software> \
 </request>"
 
+DATE_FORMAT = r"[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$"
+UPDATED_TIME_FORMAT = r"[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s(0[1-9]|1[0-9]|2[0-4]):([1-5]?[0-9]|60):([1-5]?[0-9]|60)$"
+
 
 class Client(object):
     def __init__(self, demo=False):
@@ -74,6 +77,7 @@ class Client(object):
     def request(self,
                 request_type=None,
                 data=None,
+                updated_time=None,
                 client_software="EcontPy"):
 
         if not any(request_type in type_row for type_row in REQUEST_TYPES):
@@ -83,7 +87,7 @@ class Client(object):
             username=self.username,
             password=self.password,
             request_type=self.get_request_type(request_type),
-            updated_time="2012-04-22 18:30:00",
+            updated_time=updated_time if updated_time else "",
             data=data if data else "",
             client_software=client_software)
 
@@ -113,13 +117,18 @@ class Client(object):
 
         return self.request(REQUEST_SHIPMENTS, data)
 
-    def get_cities_zones(self):
+    def get_cities_zones(self, updated_time=None):
         """
         Get zone information within cities
         """
+        if updated_time:
+            if not match(UPDATED_TIME_FORMAT, updated_time):
+                raise Exception("Invalid date supplied")
+
+            return self.request(REQUEST_CITIES_ZONES, None, updated_time)
         return self.request(REQUEST_CITIES_ZONES)
 
-    def get_cities(self, cities=[], zone_id="all", report_type=""):
+    def get_cities(self, cities=[], zone_id="all", report_type="", updated_time=None):
         """
         Get cities (if at least one city is supplied it will do a search,
         otherwise it would return all cities)
@@ -137,25 +146,53 @@ class Client(object):
 
             data = template.format(report_type=report_type, zone_id=zone_id, data=city_names)
 
+            if updated_time:
+                if not match(UPDATED_TIME_FORMAT, updated_time):
+                    raise Exception("Invalid date supplied")
+
+                return self.request(REQUEST_CITIES, data, updated_time)
             return self.request(REQUEST_CITIES, data)
+
+        if updated_time:
+            if not match(UPDATED_TIME_FORMAT, updated_time):
+                raise Exception("Invalid date supplied")
+
+            return self.request(REQUEST_CITIES, None, updated_time)
         return self.request(REQUEST_CITIES)
 
-    def get_cities_streets(self):
+    #TODO: get_cities_regions
+
+    def get_cities_streets(self, updated_time=None):
         """
         Get street information within cities
         """
+        if updated_time:
+            if not match(UPDATED_TIME_FORMAT, updated_time):
+                raise Exception("Invalid date supplied")
+
+            return self.request(REQUEST_CITIES_STREETS, None, updated_time)
         return self.request(REQUEST_CITIES_STREETS)
 
-    def get_cities_quarters(self):
+    def get_cities_quarters(self, updated_time=None):
         """
         Get quarter information within cities
         """
+        if updated_time:
+            if not match(UPDATED_TIME_FORMAT, updated_time):
+                raise Exception("Invalid date supplied")
+
+            return self.request(REQUEST_CITIES_QUARTERS, None, updated_time)
         return self.request(REQUEST_CITIES_QUARTERS)
 
-    def get_offices(self):
+    def get_offices(self, updated_time=None):
         """
         Get offices information
         """
+        if updated_time:
+            if not match(UPDATED_TIME_FORMAT, updated_time):
+                raise Exception("Invalid date supplied")
+
+            return self.request(REQUEST_OFFICES, None, updated_time)
         return self.request(REQUEST_OFFICES)
 
     def get_post_boxes(self, locations=[]):
@@ -235,7 +272,7 @@ class Client(object):
         if not date:
             raise Exception("Invalid date supplied")
 
-        if not match(r"[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$", date):
+        if not match(DATE_FORMAT, date):
             raise Exception("Invalid date supplied")
 
         template = "<delivery_days>{data}</delivery_days>"
@@ -291,7 +328,7 @@ class Client(object):
             * from_date [string] (optional) - The date agains which to check
         """
         if from_date:
-            if not match(r"[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$", from_date):
+            if not match(DATE_FORMAT, from_date):
                 raise Exception("Invalid date supplied")
 
             template = "<mediator>{mediator}</mediator><from_date>{from_date}</from_date>"
