@@ -78,6 +78,7 @@ class Client(object):
         """
         if not username or not password:
             raise Exception("No username or password supplied")
+
         self.username = username
         self.password = password
         self.demo = demo
