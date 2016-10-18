@@ -27,6 +27,7 @@ REQUEST_CLIENT_INFO = 16
 REQUEST_ACCESS_CLIENTS = 17
 REQUEST_CHECK_CD_AGREEMENT = 18
 REQUEST_MEDIATOR_DATA = 19
+REQUEST_CHECK_ADDRESS = 20
 
 REQUEST_TYPES = (
     (REQUEST_SHIPMENTS, 'shipments'), (REQUEST_CITIES_ZONES, 'cities_zones'),
@@ -44,20 +45,21 @@ REQUEST_TYPES = (
     (REQUEST_CLIENT_INFO, 'client_info'),
     (REQUEST_ACCESS_CLIENTS, 'access_clients'),
     (REQUEST_CHECK_CD_AGREEMENT, 'check_cd_agreement'),
-    (REQUEST_MEDIATOR_DATA, 'mediator_data')
+    (REQUEST_MEDIATOR_DATA, 'mediator_data'),
+    (REQUEST_CHECK_ADDRESS, 'check_address')
 )
 
 TEMPLATE = "\
-<?xml version=\"1.0\" encoding=\"UTF-8\"?> \
-<request> \
-    <client> \
-        <username>{username}</username> \
-        <password>{password}</password> \
-    </client> \
-    <request_type>{request_type}</request_type> \
-    <updated_time>{updated_time}</updated_time> \
-    {data} \
-    <client_software>{client_software}</client_software> \
+<?xml version=\"1.0\" encoding=\"UTF-8\"?>\
+<request>\
+    <client>\
+        <username>{username}</username>\
+        <password>{password}</password>\
+    </client>\
+    <request_type>{request_type}</request_type>\
+    <updated_time>{updated_time}</updated_time>\
+    {data}\
+    <client_software>{client_software}</client_software>\
 </request>"
 
 DATE_FORMAT = r"[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$"
@@ -119,6 +121,52 @@ class Client(object):
         data = template.format(detailed="ON" if detailed else "", data="".join(numbers))
 
         return self.request(REQUEST_SHIPMENTS, data)
+
+    def validate_address(self, city, post_code, quarter, street, street_num,
+                     building, entrance, floor, apartment, other, email):
+        """
+        Check if an address is valid
+        # Parameters
+            * city [string] - The name of the city
+            * post_code [int/string] - The post code of the city
+            * quarter [string] - The name of the quarter
+            * street [string] - The name of the street
+            * street_num [int/string] - The number of the street
+            * building [string] - The name of the building
+            * entrance [string] - The entrance name for a building
+            * floor [int/string] - The floor in the building
+            * apartment [int/string] - The number of the apartment
+            * other [string] - Other data
+            * email [string] - An email to which to send information about a shipment on this address
+        """
+        template = "<address>\
+                        <city>{city}</city>\
+                        <post_code>{post_code}</post_code>\
+                        <quarter>{quarter}</quarter>\
+                        <street>{street}</street>\
+                        <street_num>{street_num}</street_num>\
+                        <street_bl>{building}</street_bl>\
+                        <street_vh>{entrance}</street_vh>\
+                        <street_et>{floor}</street_et>\
+                        <street_ap>{apartment}</street_ap>\
+                        <street_other>{other}</street_other>\
+                        <email_on_delivery>{email}</email_on_delivery>\
+                    </address>"
+        data = template.format(
+                    city=city,
+                    post_code=post_code,
+                    quarter=quarter, street=street,
+                    street_num=street_num,
+                    building=building,
+                    entrance=entrance,
+                    floor=floor,
+                    apartment=apartment,
+                    other=other,
+                    email=email
+                )
+
+        return self.request(REQUEST_CHECK_ADDRESS, data)
+
 
     def get_cities_zones(self, updated_time=None):
         """
@@ -375,4 +423,4 @@ class Client(object):
 
 if __name__ == '__main__':
     c = Client("iasp-dev", "iasp-dev", True)
-    print(c.get_shipments(1))
+    c.get_shipments([12345,123])
