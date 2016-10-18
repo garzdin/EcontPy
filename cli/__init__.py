@@ -1,3 +1,4 @@
+# coding=utf-8
 from re import match
 from requests import post
 from xmltodict import parse
