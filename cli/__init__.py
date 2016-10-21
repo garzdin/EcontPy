@@ -1,5 +1,6 @@
 # coding=utf-8
 from re import match
+from json import loads, dumps
 from requests import post
 from xmltodict import parse
 
@@ -113,7 +114,7 @@ class Client(object):
             files={'file': constructed_data}
         )
 
-        return parse(response.text.encode('utf-8'))
+        return loads(dumps(parse(response.text.encode('utf-8'))))
 
     def get_request_type(self, type_id=None):
         """Get the request type from REQUEST_TYPES by id
